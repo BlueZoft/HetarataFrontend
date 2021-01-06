@@ -41,7 +41,7 @@ void main()=> runApp(MaterialApp(
       ),
     ),
     bottomNavigationBar: BottomAppBar(
-      color:Colors.lightBlueAccent,
+      color:Colors.white38,
       child: Container(height:50.0),
     ),
     floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Btn1tap.dart';
+import 'loanData.dart';
 
 class Screen2 extends StatelessWidget {
   @override
@@ -12,6 +13,7 @@ class Screen2 extends StatelessWidget {
         backgroundColor: Colors.cyan,
         shadowColor: Colors.lightBlue,
       ),
+      backgroundColor: Colors.cyan[50],
       body: Column(
         children: [
           Padding(
@@ -35,13 +37,13 @@ class Screen2 extends StatelessWidget {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Btn1tap()
+                  MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan1)
                   ),
                 );
               },
-              color: Colors.cyan[200],
-              textColor: Colors.black,
+              color: Colors.cyan[200],              textColor: Colors.black,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              elevation: 10.0,
             ),
           ),
           Padding(
@@ -56,11 +58,13 @@ class Screen2 extends StatelessWidget {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Btn2tap()),);
+                  MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan2),
+                  ));
               },
               color: Colors.cyan[200],
               textColor: Colors.black,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              elevation: 10.0,
             ),
           ),
           Padding(
@@ -74,11 +78,12 @@ class Screen2 extends StatelessWidget {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Btn3tap()),);
+                  MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan3)),);
                 },
               color: Colors.cyan[200],
               textColor: Colors.black,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              elevation: 10.0,
             ),
           ),
           Padding(
@@ -92,6 +97,7 @@ class Screen2 extends StatelessWidget {
               color: Colors.cyan[200],
               textColor: Colors.black,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              elevation: 10.0,
             ),
           ),
           Padding(
@@ -105,6 +111,7 @@ class Screen2 extends StatelessWidget {
               color: Colors.cyan[200],
               textColor: Colors.black,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              elevation: 10.0,
             ),
           ),
         ],

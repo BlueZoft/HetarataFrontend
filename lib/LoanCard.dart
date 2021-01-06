@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'loanData.dart';
+import 'DataDisplay.dart';
 
 class LoanCard extends StatelessWidget {
 
@@ -12,6 +13,8 @@ class LoanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical:10.0, horizontal: 10.0),
+      color: Colors.white70,
+      elevation: 10.0,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Column(
@@ -31,13 +34,22 @@ class LoanCard extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height:4.0),
-            OutlineButton.icon(
-              highlightElevation:0.5,
-              highlightColor: Colors.teal[200],
-              highlightedBorderColor: Colors.teal[300],
-              onPressed: (){},
-              icon: Icon(Icons.fast_forward),
-              label: Text('ඔබ දැනගතයුතු කරුණු'),
+            SizedBox(
+              height: 50.0,
+              child: OutlineButton.icon(
+                borderSide: BorderSide(color: Colors.black54,width:1.0),
+                highlightElevation:1,
+                color: Colors.tealAccent,
+                highlightColor: Colors.teal[100],
+                highlightedBorderColor: Colors.cyanAccent[300],
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DisplayView(loan:loan)),);
+                },
+                icon: Icon(Icons.fast_forward),
+                label: Text('ඔබ දැනගතයුතු කරුණු'),
+              ),
             ),
 
           ],
