@@ -1,5 +1,3 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Screen2.dart';
 
@@ -33,8 +31,7 @@ void main()=> runApp(MaterialApp(
                    context,
                    MaterialPageRoute(builder: (context) => Screen2()
                    ),
-                 );
-               },
+                 );},
             );
           }
         ),

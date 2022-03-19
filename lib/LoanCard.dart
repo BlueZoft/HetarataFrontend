@@ -1,5 +1,3 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'loanData.dart';
 import 'DataDisplay.dart';
@@ -24,34 +22,23 @@ class LoanCard extends StatelessWidget {
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.black87),
-              textAlign: TextAlign.center,
-            ),
+              textAlign: TextAlign.center,),
             SizedBox(height: 3.0,),
             Text(loan.sDes,
               style: TextStyle(
                   fontSize: 15.0,
                   color: Colors.grey[800]),
-              textAlign: TextAlign.center,
-            ),
+              textAlign: TextAlign.center,),
             SizedBox(height:4.0),
             SizedBox(
               height: 50.0,
-              child: OutlineButton.icon(
-                borderSide: BorderSide(color: Colors.black54,width:1.0),
-                highlightElevation:1,
-                color: Colors.tealAccent,
-                highlightColor: Colors.teal[100],
-                highlightedBorderColor: Colors.cyanAccent[300],
+              child: OutlinedButton.icon(
                 onPressed: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DisplayView(loan:loan)),);
-                },
+                    MaterialPageRoute(builder: (context) => DisplayView(loan:loan)),);},
                 icon: Icon(Icons.fast_forward),
-                label: Text('ඔබ දැනගතයුතු කරුණු'),
-              ),
-            ),
-
+                label: Text('ඔබ දැනගතයුතු කරුණු'),),),
           ],
         ),
       ),
