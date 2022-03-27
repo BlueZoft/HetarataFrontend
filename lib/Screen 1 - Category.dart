@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'Btn1tap.dart';
-import 'loanData.dart';
+import 'Screen 2 - Loans.dart';
+import 'Loan table and class.dart';
+import 'Screen 4 - User Form.dart';
 
 
-
+//TODO migrate splash screen
 class Screen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,10 @@ class Screen2 extends StatelessWidget {
                   fontSize: 18.0,),),
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.all(10.0),),
-              onPressed: (){},),
+              onPressed: (){
+                    Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan4)),);},),
           Padding(
             padding: EdgeInsets.all(10.0),),
          ElevatedButton(
@@ -79,7 +83,10 @@ class Screen2 extends StatelessWidget {
                   fontSize: 18.0,),),
            style: ElevatedButton.styleFrom(
              padding: EdgeInsets.all(10.0),),
-              onPressed: (){},),
+              onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CustomerForm()),);},),
 
           ]),
       );

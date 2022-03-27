@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'loanData.dart';
-import 'DataDisplay.dart';
+import 'Loan table and class.dart';
+import 'Screen 3 - Loan Details.dart';
 
 class LoanCard extends StatelessWidget {
 

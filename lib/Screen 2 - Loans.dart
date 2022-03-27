@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'loanData.dart';
-import 'LoanCard.dart';
+import 'Loan table and class.dart';
+import 'Build loan details card.dart';
 
 
 class Btn1tap extends StatelessWidget {
@@ -19,9 +19,7 @@ class Btn1tap extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-        children: loanlist.map((loan) => LoanCard(loan:loan)).toList(),
-      ),
-      ),
+        children: loanlist.map((loan) => LoanCard(loan:loan)).toList(),),),
       backgroundColor: Colors.cyan[100],
     );
   }

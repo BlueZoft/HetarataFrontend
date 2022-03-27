@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'loanData.dart';
+import 'Loan table and class.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'Lastscreen.dart';
+import 'Screen 4 - User Form.dart';
 
 
 class DisplayView extends StatelessWidget {
@@ -91,10 +91,9 @@ class DisplayView extends StatelessWidget {
       bottomNavigationBar: SizedBox(
         height: 70,
         child: ElevatedButton.icon (
-          label: Expanded(
-            child: Text("මෙම මූල්‍ය පහසුකම පිළිබඳ විමසීමට පිවිසෙන්න...",
+            label: Text("මෙම මූල්‍ය පහසුකම පිළිබඳ විමසීමට පිවිසෙන්න...",
               style: TextStyle(fontSize:18.0,),
-              textAlign: TextAlign.center,),),
+              textAlign: TextAlign.center,),
           icon: Icon(Icons.arrow_forward),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.white70),
@@ -102,7 +101,7 @@ class DisplayView extends StatelessWidget {
           onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => LastScreen()),
+              MaterialPageRoute(builder: (context) => CustomerForm()),
             );},
       )
         ),);
