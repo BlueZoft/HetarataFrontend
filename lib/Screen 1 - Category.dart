@@ -5,6 +5,7 @@ import 'Screen 4 - User Form.dart';
 
 
 //TODO migrate splash screen
+
 class Screen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class Screen2 extends StatelessWidget {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan1)
+                  MaterialPageRoute(builder: (context) => LoanOptions(loanlist:loan1)
                   ),);},
             ),
     Padding(
@@ -49,7 +50,7 @@ class Screen2 extends StatelessWidget {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan2),
+                  MaterialPageRoute(builder: (context) => LoanOptions(loanlist:loan2),
                   ));},),
           Padding(
             padding: EdgeInsets.all(10.0),),
@@ -62,7 +63,7 @@ class Screen2 extends StatelessWidget {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan3)),);},),
+                  MaterialPageRoute(builder: (context) => LoanOptions(loanlist:loan3)),);},),
           Padding(
             padding: EdgeInsets.all(10.0),),
         ElevatedButton(
@@ -74,7 +75,7 @@ class Screen2 extends StatelessWidget {
               onPressed: (){
                     Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Btn1tap(loanlist:loan4)),);},),
+                MaterialPageRoute(builder: (context) => LoanOptions(loanlist:loan4)),);},),
           Padding(
             padding: EdgeInsets.all(10.0),),
          ElevatedButton(

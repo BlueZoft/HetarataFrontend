@@ -3,10 +3,12 @@ import 'Loan table and class.dart';
 import 'Build loan details card.dart';
 
 
-class Btn1tap extends StatelessWidget {
+
+
+class LoanOptions extends StatelessWidget {
 
   final List<LoanClass> loanlist;
-  Btn1tap ({this.loanlist});
+  LoanOptions ({this.loanlist});
 
   @override
   Widget build(BuildContext context) {

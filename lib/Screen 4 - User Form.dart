@@ -1,24 +1,63 @@
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+
+Future<User> fetchUser() async{
+  final response = await http.get(Uri.parse('http://10.0.2.2:5000/api/userdata'));
+
+  if (response.statusCode == 200) {
+    return User.fromJson(jsonDecode(response.body));
+  }
+  else {
+    throw Exception('Failed to load user');
+  }
+}
+
+class User {
+  final String nic;
+  final String createdAt;
+
+  const User({this.nic, this.createdAt});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+        nic: json['NIC'],
+        createdAt: json['createdAt']
+    );
+  }
+}
 
 class CustomerForm extends StatefulWidget {
   const CustomerForm({Key key}) : super(key: key);
+
+
   @override
   CustomerFormState createState() {
     return CustomerFormState();
   }}
 
-
 class CustomerFormState extends State<CustomerForm> {
+Future<User> futureUser;
+
+  @override
+  void initState() {
+    super.initState();
+    futureUser = fetchUser();
+  }
   final formKey = GlobalKey<FormState>();
 
   String _name = '';
-  String _nic = '';
   String _age = '';
-  String _sex = 'male';
+  String _nic = '';
+  String _sex = '';
   String _telephone = '';
   String _address = '';
   String _email = '';
   String _inquiry = '';
+  String _branch = '';
+
 
   @override
     Widget build(BuildContext context) => Scaffold(
@@ -38,6 +77,7 @@ class CustomerFormState extends State<CustomerForm> {
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: TextFormField(
                       autofocus: true,
+                      maxLength: 80,
                       decoration: InputDecoration(labelText: 'නම'),
                       validator: (value) {
                         if (value.isEmpty) {
@@ -52,11 +92,12 @@ class CustomerFormState extends State<CustomerForm> {
                   child: TextFormField(
                       decoration: InputDecoration(labelText: 'වයස (අවු. 18ට වැඩි විය යුතුයි)'),
                       validator: (value) {
-                        int value1 = int.parse(value);
                         if (value.isEmpty) {
                           return 'මෙම තොරතුරු අවශ්‍යයි';}
-                        else if (value1<18 || value1 > 99) {
-                          return 'වලංගු වයසක් ඇතුළත් කරන්න';}
+                        else if (int.parse(value)<18) {
+                          return 'වයස අවුරුදු 18ට වැඩි විය යුතුයි';}
+                        else if (int.parse(value) > 99) {
+                          return 'සැබෑ වයසක් ඇතුළත් කරන්න';}
                         else {
                           return null;}},
                       onSaved: (value) => _age = value),
@@ -69,10 +110,10 @@ class CustomerFormState extends State<CustomerForm> {
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'මෙම තොරතුරු අවශ්‍යයි';}
-                        //TODO Fix NIC RegExp
-                        String p =  r'(^[0-9]{10}v$|V$|x|X|)';
+                        //TODO finish regexp
+                        String p =  r'(^[0-9vVxX]{10,12}$)';
                         RegExp regExp = new RegExp(p);
-                        if (regExp.hasMatch(value)) {
+                        if (regExp.hasMatch(p)) {
                           return null;}
                         else
                           return 'ඇතුළත් කල ජාතික හැඳුනුම්පත් අංකය වලංගු නොවේ';},
@@ -82,7 +123,6 @@ class CustomerFormState extends State<CustomerForm> {
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: Row(
                     children:[
-
                       SizedBox(
                         width: 100.0,
                         child: Text('ස්ත්‍රී / පුරුෂ භාවය :',
@@ -111,25 +151,25 @@ class CustomerFormState extends State<CustomerForm> {
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: TextFormField(
                       decoration: InputDecoration(
                           labelText: 'දුරකථන අංකය'),
                       validator: (value) {
-                        String pattern = r'(^([0-9]{10}$)';
+                        String pattern = r'^[0-9]{10}$';
                         RegExp regExp = new RegExp(pattern);
                         if (value.length == 0) {
                           return 'මෙම තොරතුරු අවශ්‍යයි';}
                         else if (!regExp.hasMatch(value)) {
-                          return 'ඉලක්කම් 10ක් සහිත 0න් ආරම්භ වන වලංගු දුරකථන අංකයක් ඇතුළත් කරන්න';}
+                          return 'ඉලක්කම් 10ක් සහිත 0න් ආරම්භ වන වලංගු දුරකථන අංකයක් \n ඇතුළත් කරන්න';}
                         else {return null;}},
                       onSaved: (value) => _telephone = value),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: TextFormField(
+                    maxLength: 250,
                       decoration: InputDecoration(
                           labelText: 'ලිපිනය'),
                       validator: (value) {
@@ -149,60 +189,109 @@ class CustomerFormState extends State<CustomerForm> {
                             "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\." +
                             "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+";
                         RegExp regExp = new RegExp(p);
-                        if (regExp.hasMatch(value)) {
-                          return null;}
-                        else return 'වලංගු විද්‍යුත් ලිපිනය ඇතුළත් කරන්න';},
-                      onSaved: (value) => _email = value),
+                        if (value.isNotEmpty && !regExp.hasMatch(value)) {
+                          return 'ඇතුළත් කල විද්‍යුත් ලිපිනය වලංගු නොවේ';}
+                        else
+                          return null;},
+                      onSaved: (value) => _email = value)
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: TextFormField(
+                    maxLength: 500,
                       decoration: InputDecoration(
                           labelText: 'අමතර කරුණු / විමසීම්'),
                       onSaved: (value) => _inquiry = value),
                 ),
-
                 Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),),
-
-                DropdownButton<String>(
-                    hint:Text ('ඔබට ළඟම බැංකු ශාඛාව මෙතනින් තෝරන්න.'),
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24, elevation: 16, style: TextStyle(color: Colors.teal),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.teal,),
-                    onChanged: (String newValue) {
-                      setState(() {});},
-                    items: <String>['Akkaraipattu', 'Agarapathana', 'Matara', 'Colombo','Anuradapura','havelock town','kochchi','ayyo','salaryyyy','balamu mokada wenne','deyiyandara','dewundara','nagarabada','haal pol','sirikurusa','wanaatha']
-                        .map<DropdownMenuItem<String>>((String value){
-                      return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,
-                            style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center,));
-                    }).toList()),
-
+                DropdownButton(
+                  hint: Text('ඔබට ළඟම බැංකු ශාඛාව මෙතනින් තෝරන්න.'),
+                  icon: Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.teal),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.teal,
+                  ),
+                  onChanged: (value) async {
+                    setState(() {
+                      _branch = value;
+                      debugPrint(value);
+                    });
+                  },
+                  items: <String>['Matara', 'Colombo', 'Galle']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontSize: 20.0),
+                          textAlign: TextAlign.center,
+                        ));
+                  }).toList(),
+                ),
                 Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 45),),
 
                 ElevatedButton (
+
                   onPressed: () {
-                    final isValid = formKey.currentState.validate();
-                    if (isValid){
+                    if (_sex.isEmpty){
+                      final message = 'ස්ත්‍රි පුරුෂ බව ඇතුළත් කරන්න';
+                      final snackBar =  SnackBar(
+                        content: Text(message),
+                        backgroundColor:Colors.redAccent,
+                        duration: Duration(milliseconds: 3000),);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);}
+                    else
+                    if (_branch.isEmpty){
+                      final message = 'බැංකු ශාඛාව ඇතුළත් කරන්න';
+                      final snackBar =  SnackBar(
+                        content: Text(message),
+                        backgroundColor:Colors.redAccent,
+                        duration: Duration(milliseconds: 3000),);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);}
+                    else
+                     /* final timeNow = new DateTime.now();
+                    final lastEntry = DateTime.parse(futureUser.createdAt);
+                    final difference = (timeNow.difference(lastEntry)).inHours;
+                    if (futureUser.nic = _nic && difference<24) {
+                      final message = '‍පෙර විමසීම කර කාලය ඉකුත් වී නැත';
+                      final snackBar =  SnackBar(
+                        content: Text(message),
+                        backgroundColor:Colors.redAccent,
+                        duration: Duration(milliseconds: 3000),);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);}*/
+                      //TODO : If futureUser.NIC = to _nic && parsetodate(futureUser.createdAt) < 24 hours, error message and no validation
+
+                    if (formKey.currentState.validate()){
                       formKey.currentState.save();
                       final message = '$_name, විමසීම සාර්ථකයි.';
                       final snackBar =  SnackBar(
                         content: Text(message),
-                        backgroundColor:Colors.cyan,
-                        duration: Duration(milliseconds: 900),);
+                        backgroundColor:Colors.blue,
+                        duration: Duration(milliseconds: 3000),);
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                    else {
-                      return 'ඇතුළත් කළ තොරතුරු සම්පූර්ණ නොවේ';}},
-                  child: Text('ඔබේ විමසීම මෙතැනින් අප වෙත යොමුකරන්න.'),)
-
+                      return http.post(
+                        Uri.parse('http://10.0.2.2:5000/api/userdata'),
+                        headers: <String, String>{
+                          'Content-Type': 'application/json; charset=UTF-8',},
+                          body: jsonEncode(<String, String>{
+                            'name': _name,
+                            'age': _age,
+                            'NIC': _nic,
+                            'sex': _sex,
+                            'tel': _telephone,
+                            'addr': _address,
+                            'email': _email,
+                            'inquiry': _inquiry,
+                            'branch': _branch
+                          })
+                      );
+                    }},
+                  child: Text('ඔබේ විමසීම මෙතැනින් අප වෙත යොමුකරන්න.'),
+                )
                ]
               ),
-
             ),
-
-
       ));}
