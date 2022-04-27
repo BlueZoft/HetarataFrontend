@@ -1,51 +1,17 @@
 import 'dart:convert';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+// import 'Fetch User Data.dart';
 
-
-Future<User> fetchUser() async{
-  final response = await http.get(Uri.parse('http://10.0.2.2:5000/api/userdata'));
-
-  if (response.statusCode == 200) {
-    return User.fromJson(jsonDecode(response.body));
-  }
-  else {
-    throw Exception('Failed to load user');
-  }
-}
-
-class User {
-  final String nic;
-  final String createdAt;
-
-  const User({this.nic, this.createdAt});
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-        nic: json['NIC'],
-        createdAt: json['createdAt']
-    );
-  }
-}
 
 class CustomerForm extends StatefulWidget {
   const CustomerForm({Key key}) : super(key: key);
-
-
   @override
   CustomerFormState createState() {
     return CustomerFormState();
   }}
 
 class CustomerFormState extends State<CustomerForm> {
-Future<User> futureUser;
-
-  @override
-  void initState() {
-    super.initState();
-    futureUser = fetchUser();
-  }
   final formKey = GlobalKey<FormState>();
 
   String _name = '';
@@ -57,7 +23,7 @@ Future<User> futureUser;
   String _email = '';
   String _inquiry = '';
   String _branch = '';
-
+  final branchList = ['Matara', 'Colombo', 'Galle','Pamburana','Deniyaya'];
 
   @override
     Widget build(BuildContext context) => Scaffold(
@@ -108,15 +74,12 @@ Future<User> futureUser;
                       decoration: InputDecoration(
                           labelText: 'ජාතික හැඳුනුම්පත් අංකය'),
                       validator: (value) {
+                         RegExp regExp = new RegExp(r'^([0-9]{9}[xXvV]|[0-9]{12})$');
                         if (value.isEmpty) {
                           return 'මෙම තොරතුරු අවශ්‍යයි';}
-                        //TODO finish regexp
-                        String p =  r'(^[0-9vVxX]{10,12}$)';
-                        RegExp regExp = new RegExp(p);
-                        if (regExp.hasMatch(p)) {
-                          return null;}
-                        else
-                          return 'ඇතුළත් කල ජාතික හැඳුනුම්පත් අංකය වලංගු නොවේ';},
+                        else if (!regExp.hasMatch(value)) {
+                          return 'වලංගු ජාතික හැඳුනුම්පත් අංකයක් ඇතුළත් කරන්න';}
+                        else {return null;}},
                       onSaved: (value) => _nic = value),
                 ),
                 Padding(
@@ -157,8 +120,7 @@ Future<User> futureUser;
                       decoration: InputDecoration(
                           labelText: 'දුරකථන අංකය'),
                       validator: (value) {
-                        String pattern = r'^[0-9]{10}$';
-                        RegExp regExp = new RegExp(pattern);
+                        RegExp regExp = new RegExp(r'^[0-9]{10}$');
                         if (value.length == 0) {
                           return 'මෙම තොරතුරු අවශ්‍යයි';}
                         else if (!regExp.hasMatch(value)) {
@@ -204,32 +166,24 @@ Future<User> futureUser;
                       onSaved: (value) => _inquiry = value),
                 ),
                 Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),),
-                DropdownButton(
+                DropdownButton<String>(
                   hint: Text('ඔබට ළඟම බැංකු ශාඛාව මෙතනින් තෝරන්න.'),
                   icon: Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
                   style: TextStyle(color: Colors.teal),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.teal,
-                  ),
-                  onChanged: (value) async {
-                    setState(() {
-                      _branch = value;
-                      debugPrint(value);
-                    });
-                  },
-                  items: <String>['Matara', 'Colombo', 'Galle']
-                      .map<DropdownMenuItem<String>>((String value) {
+                  underline: Container(height: 2, color: Colors.teal,),
+
+                  items: branchList.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                         value: value,
                         child: Text(
                           value,
                           style: TextStyle(fontSize: 20.0),
-                          textAlign: TextAlign.center,
-                        ));
-                  }).toList(),
+                          textAlign: TextAlign.center,));}).toList(),
+                  onChanged: (value) {setState(() {_branch = value; debugPrint(value);});
+                  },
+
                 ),
                 Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 45),),
 
@@ -252,17 +206,16 @@ Future<User> futureUser;
                         duration: Duration(milliseconds: 3000),);
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);}
                     else
-                     /* final timeNow = new DateTime.now();
-                    final lastEntry = DateTime.parse(futureUser.createdAt);
-                    final difference = (timeNow.difference(lastEntry)).inHours;
-                    if (futureUser.nic = _nic && difference<24) {
-                      final message = '‍පෙර විමසීම කර කාලය ඉකුත් වී නැත';
-                      final snackBar =  SnackBar(
-                        content: Text(message),
-                        backgroundColor:Colors.redAccent,
-                        duration: Duration(milliseconds: 3000),);
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);}*/
-                      //TODO : If futureUser.NIC = to _nic && parsetodate(futureUser.createdAt) < 24 hours, error message and no validation
+                   // final timeNow = new DateTime.now();
+                   //  final lastEntry = DateTime.parse(futureUser.createdAt);
+                   //  final difference = (timeNow.difference(lastEntry)).inHours;
+                   //  if (futureUser.nic = _nic && difference<24) {
+                   //    final message = '‍පෙර විමසීම කර කාලය ඉකුත් වී නැත';
+                   //    final snackBar =  SnackBar(
+                   //      content: Text(message),
+                   //      backgroundColor:Colors.redAccent,
+                   //      duration: Duration(milliseconds: 3000),);
+                   //    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                     if (formKey.currentState.validate()){
                       formKey.currentState.save();

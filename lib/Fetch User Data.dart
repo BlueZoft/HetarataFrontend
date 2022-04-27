@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<User> fetchUser() async{
@@ -27,3 +27,10 @@ class User {
   }
 }
 
+Future<User> futureUser;
+
+// @override
+// void initState() {
+//   super.initState();
+//   futureUser = fetchUser();
+// }

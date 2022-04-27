@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
 import 'Loan table and class.dart';
 import 'Screen 3 - Loan Details.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+Future<LoanClass> getLoans() async{
+  final loan = await http.get(Uri.parse('http://10.0.2.2:5000/api/loans'));
+
+  if (loan.statusCode == 200) {
+    return LoanClass.fromJson(jsonDecode(loan.body));
+  }
+  else {
+    throw Exception('Failed to load loans');
+  }
+}
 
 class LoanCard extends StatelessWidget {
 
