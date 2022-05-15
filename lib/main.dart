@@ -7,8 +7,7 @@ void main()=> runApp(MaterialApp(
       title: Text('"හෙටරට" ව්‍යවසායකත්ව විහිදුම'),
       centerTitle: true,
       backgroundColor: Colors.cyan,
-      shadowColor: Colors.lightBlue,
-    ),
+      shadowColor: Colors.lightBlue,),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -30,8 +29,7 @@ void main()=> runApp(MaterialApp(
                  Navigator.push(
                    context,
                    MaterialPageRoute(builder: (context) => Screen2()
-                   ),
-                 );},
+                   ),);},
             );
           }
         ),
