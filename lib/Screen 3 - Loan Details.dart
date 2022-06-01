@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'Loan table and class.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'Screen 4 - User Form.dart';
 
 class DisplayView extends StatelessWidget {
@@ -22,10 +21,8 @@ class DisplayView extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Colors.cyan,
           shadowColor: Colors.tealAccent[50]),
-      body: StaggeredGridView.countBuilder(
-        crossAxisCount: 1,
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int index) =>
+      body: SingleChildScrollView(
+        child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -105,9 +102,6 @@ class DisplayView extends StatelessWidget {
             ),
           ),
         ]),
-        staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
-        mainAxisSpacing: 8.0,
-        crossAxisSpacing: 4.0,
       ),
       bottomNavigationBar: SizedBox(
           height: 70,
@@ -127,7 +121,8 @@ class DisplayView extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CustomerForm(askLoan:loan.lName)),
+                MaterialPageRoute(
+                    builder: (context) => CustomerForm(askLoan: loan.lName)),
               );
             },
           )),

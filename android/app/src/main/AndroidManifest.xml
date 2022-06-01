@@ -13,7 +13,7 @@
 
     <application
 
-        android:label="progress_app"
+        android:label="Hetarata"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
